@@ -1,0 +1,85 @@
+"""numpy: This library is used for numerical computations in Python. It provides support for arrays, matrices, and many mathematical functions. 
+matplotlib.pyplot: This is a plotting library used for creating static, interactive, and animated visualizations in Python. 
+Here, it is used to plot data and the regression line. matplotlib: This is the main package that pyplot is part of. We use it here to check the version."""
+
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib
+
+"""compute_cost(X, y, theta): This function calculates the cost of using a particular set of parameters (theta) for linear regression on the data (X and y).
+X: Feature matrix with shape (m, n) where m is the number of examples and n is the number of features.
+y: Output vector with shape (m, 1) containing the actual values.
+theta: Parameter vector with shape (n+1, 1) for the linear regression model.
+Cost Calculation:
+Predictions: X @ theta computes the predicted values using matrix multiplication.
+Errors: Difference between predictions and actual values.
+Cost: Mean squared error (MSE) divided by 2. This is a common cost function for linear regression."""
+
+def compute_cost(X, y, theta):
+    """
+    Compute the cost for linear regression.
+    
+    Parameters:
+    X : numpy.ndarray
+        Feature matrix.
+    y : numpy.ndarray
+        Output vector.
+    theta : numpy.ndarray
+        Parameters of the model.
+        
+    Returns:
+    float
+        The cost computed.
+    """
+    m = len(y)  # number of training examples
+    predictions = X @ theta  # @ is the matrix multiplication operator
+    errors = predictions - y
+    cost = (1 / (2 * m)) * np.sum(errors ** 2)
+    return cost
+
+# Generate synthetic data
+"""np.random.seed(0): Sets the seed for random number generation to ensure reproducibility of results.
+m = 100: Specifies the number of training examples.
+X = 2 * np.random.rand(m, 1): Generates random feature values between 0 and 2.
+y = 4 + 3 * X + np.random.randn(m, 1): Generates target values with a linear relationship to X plus some random noise"""
+
+np.random.seed(0)
+m = 100  # number of training examples
+X = 2 * np.random.rand(m, 1)
+y = 4 + 3 * X + np.random.randn(m, 1)
+
+# Add the intercept term to X
+"""X_b: Augments the feature matrix X by adding a column of ones. 
+This represents the intercept term (x0) in the linear regression model. The new matrix X_b has shape (m, 2)"""
+
+X_b = np.c_[np.ones((m, 1)), X]  # Add x0 = 1 to each instance
+
+# Initialize theta
+"""theta: Initializes the parameter vector with random values. It has shape (2, 1) corresponding to the intercept 
+and the slope in the linear regression model."""
+
+theta = np.random.randn(2, 1)
+
+# Compute the cost
+"""cost: Computes the cost using the initial theta values. This helps in evaluating how well the initial parameters fit the data."""
+
+cost = compute_cost(X_b, y, theta)
+print(f"Initial cost: {cost}")
+
+# Print versions
+"""Prints: Displays the versions of numpy and matplotlib for verification purposes."""
+
+print("Numpy version:", np.__version__)
+print("Matplotlib version:", matplotlib.__version__)
+
+# Plot the data and the model prediction
+"""plt.scatter(X, y, color='blue', label='Training data'): Plots the original data points as a scatter plot.
+plt.plot(X, X_b @ theta, color='red', label='Prediction'): Plots the linear regression line. The line represents the predictions based on the model parameters.
+plt.xlabel('X'), plt.ylabel('y'), plt.legend(), plt.show(): Customize the plot with axis labels, a legend, and display the plot."""
+
+plt.scatter(X, y, color='blue', label='Training data')
+plt.plot(X, X_b @ theta, color='red', label='Prediction')
+plt.xlabel('X')
+plt.ylabel('y')
+plt.legend()
+plt.show()
