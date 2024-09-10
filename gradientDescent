@@ -1,1 +1,107 @@
+"""Purpose: Imports the NumPy library, which is used for numerical operations, especially working with arrays and matrices."""
+import numpy as np
+
+"""Purpose: Computes the cost function for linear regression. The cost function measures how well the model's predictions match the actual values.
+The goal of gradient descent is to minimize this cost.
+
+m: Number of training examples.
+predictions: The predicted values calculated by multiplying the feature matrix X with the parameter vector theta.
+errors: The difference between the predicted values and actual target values y.
+cost: The average squared error, scaled by 1 / (2 * m) to compute the mean squared error."""
+
+def compute_cost(X, y, theta):
+    """
+    Compute the cost for linear regression.
+    """
+    m = len(y)
+    predictions = X @ theta
+    errors = predictions - y
+    cost = (1 / (2 * m)) * np.sum(np.square(errors))
+    return cost
+
+"""Purpose: Performs gradient descent to minimize the cost function and learn the optimal theta.
+
+m: Number of training examples.
+cost_history: Array to keep track of the cost value after each iteration, useful for monitoring convergence.
+predictions: Predicted values using current theta.
+errors: Differences between predictions and actual values.
+theta: Updated parameters based on the gradient of the cost function.
+alpha: Learning rate, which controls how much the parameters are adjusted during each update.
+num_iters: Number of iterations to run gradient descent"""
+
+def gradient_descent(X, y, theta, alpha, num_iters):
+    """
+    Perform gradient descent to learn theta.
+    """
+    m = len(y)
+    cost_history = np.zeros(num_iters)
+    
+    for i in range(num_iters):
+        # Compute the predictions
+        predictions = X @ theta
+        
+        # Compute the error
+        errors = predictions - y
+        
+        # Update theta
+        theta -= (alpha / m) * (X.T @ errors)
+        
+        # Save the cost for the current iteration
+        cost_history[i] = compute_cost(X, y, theta)
+    
+    return theta, cost_history
+
+"""Purpose: Normalizes the feature matrix to have zero mean and unit variance for each feature (except the intercept term).
+
+X_norm: Copy of the original feature matrix X where the normalization will be applied.
+means: Mean value for each feature (excluding the intercept column).
+stds: Standard deviation for each feature (excluding the intercept column).
+Normalization: Standardizes the feature values to improve convergence during gradient descent."""
+
+def feature_normalize(X):
+    """
+    Normalize the features in X.
+    """
+    # Exclude the first column (intercept term) from normalization
+    X_norm = X.copy()
+    means = np.mean(X[:, 1:], axis=0)
+    stds = np.std(X[:, 1:], axis=0)
+    
+    X_norm[:, 1:] = (X[:, 1:] - means) / stds
+    
+    return X_norm
+
+"""Purpose: Demonstrates how to use the functions defined above with example data.
+
+X: Feature matrix including an intercept term (column of ones) and two features.
+y: Target values for each training example.
+X = feature_normalize(X): Normalizes the features.
+theta: Initializes the parameter vector with zeros.
+alpha: Sets the learning rate.
+num_iters: Sets the number of iterations for gradient descent.
+theta, cost_history = gradient_descent(...): Performs gradient descent to optimize theta.
+print("Theta:", theta): Prints the final learned parameters.
+print("Final cost:", cost_history[-1]): Prints the final cost value after the last iteration."""
+
+# Example usage:
+if __name__ == "__main__":
+    # Example data
+    X = np.array([[1, 2104, 5], [1, 1416, 3], [1, 1534, 3], [1, 852, 2]])
+    y = np.array([[400], [232], [315], [178]])
+    
+    # Feature scaling
+    X = feature_normalize(X)
+    
+    # Initialize theta (parameter vector)
+    theta = np.zeros((X.shape[1], 1))
+    
+    # Set learning rate and number of iterations
+    alpha = 0.01  # Try reducing if necessary
+    num_iters = 1000
+    
+    # Perform gradient descent
+    theta, cost_history = gradient_descent(X, y, theta, alpha, num_iters)
+    
+    print("Theta:", theta)
+    print("Final cost:", cost_history[-1])
 
