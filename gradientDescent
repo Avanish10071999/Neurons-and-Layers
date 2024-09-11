@@ -11,7 +11,10 @@ cost: The average squared error, scaled by 1 / (2 * m) to compute the mean squar
 
 def compute_cost(X, y, theta):
     
-"""Compute the cost for linear regression."""
+"""
+Compute the cost for linear regression.
+
+"""
 
     m = len(y)
     predictions = X @ theta
