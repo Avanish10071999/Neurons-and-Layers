@@ -10,9 +10,9 @@ errors: The difference between the predicted values and actual target values y.
 cost: The average squared error, scaled by 1 / (2 * m) to compute the mean squared error."""
 
 def compute_cost(X, y, theta):
-    """
-    Compute the cost for linear regression.
-    """
+    
+"""Compute the cost for linear regression."""
+
     m = len(y)
     predictions = X @ theta
     errors = predictions - y
